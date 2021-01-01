@@ -5,7 +5,12 @@
         <div>Pods by namespace</div>
         <div>
           <label>
-            <select v-model="currentNamespace.name" class="NamespaceSelect">
+            <select
+              v-model="currentNamespace"
+              @change="updateNamespace(currentNamespace)"
+              class="NamespaceSelect"
+            >
+              <option value="" selected="selected">all</option>
               <option
                 v-for="namespace in namespaces"
                 v-bind:value="namespace.name"
@@ -19,18 +24,55 @@
       </h1>
     </div>
     <div>
-      <h1 class="KubernetesPodsTitle">Lista de pods (Real time) {{ currentNamespace }}</h1>
+      <h1 class="KubernetesPodsTitle">
+        Lista de pods (Real time) en el namespace {{ currentNamespace }}
+      </h1>
       <div class="PodConsoleHeader">user@host:/opt/kubernetes</div>
-      <div class="PodConsolePrompt">user@host # kubectl get pods {{ kubectlCommend }}</div>
+      <div class="PodConsolePrompt">
+        user@host # kubectl get pods {{ kubectlCommand }}
+      </div>
       <div class="PodConsole PodConsoleGrid PodFontWeightBold">
         <div>NAMESPACE</div>
         <div>NAME</div>
         <div>READY</div>
         <div>STATUS</div>
         <div>RESTARTS</div>
-        <div>AGE</div>
-        <div>IP</div>
+        <div>UPTIME</div>
+        <div>HOST IP</div>
+        <div>POD IP</div>
       </div>
+      <div
+        class="PodConsole PodConsoleGrid"
+        v-for="item in clusterPods"
+        :key="item"
+      >
+        <div>
+          {{ item.namespace !== "" ? item.namespace : "-" }}
+        </div>
+        <div>
+          {{ item.name !== "" ? item.name : "-" }}
+        </div>
+        <div>
+          {{ item.ready !== "" ? item.ready : "-" }}
+        </div>
+        <div>
+          {{ item.status !== "" ? item.status : "-" }}
+        </div>
+        <div>
+          {{ item.restarts !== "" ? item.restarts : "-" }}
+        </div>
+        <div>
+          {{ item.date !== "" ? item.date : "-" }}
+        </div>
+        <div>
+          {{ item["host-ip"] !== "" ? item["host-ip"] : "-" }}
+        </div>
+        <div>
+          {{ item["pod-ip"] !== "" ? item["pod-ip"] : "-" }}
+        </div>
+      </div>
+      <div class="PodConsolePrompt">user@host # |</div>
+      <div class="PodConsoleBottom"></div>
     </div>
   </div>
 </template>
@@ -44,21 +86,34 @@ export default defineComponent({
   data() {
     return {
       namespaces: [],
-      currentNamespace: "",
-      kubectlCommend: "--all-namespaces"
+      currentNamespace: "--all-namespaces",
+      kubectlCommand: "",
+      clusterPods: []
     };
   },
   async mounted() {
-    this.namespaces = await this.methodTest();
+    this.namespaces = await this.getClusterNamespaces();
+    this.clusterPods = await this.getClusterPods("");
   },
   methods: {
-    async methodTest() {
-      const clusterNamespaces = await PodService.namespaces().then(
-        clusterResponse => {
-          return clusterResponse.data;
-        }
-      );
-      return clusterNamespaces;
+    async getClusterNamespaces() {
+      return await PodService.namespaces().then(clusterResponse => {
+        return clusterResponse.data;
+      });
+    },
+    getClusterPods(namespace) {
+      return PodService.list(namespace).then(clusterResponse => {
+        return clusterResponse.data;
+      });
+    },
+    async updateNamespace(namespace) {
+      this.currentNamespace =
+        namespace === "" || namespace === undefined ? "all" : namespace;
+      this.kubectlCommand =
+        namespace === "" || namespace === undefined
+          ? "--all-namespaces"
+          : "-n " + namespace;
+      this.clusterPods = await this.getClusterPods(namespace);
     }
   }
 });
@@ -114,9 +169,12 @@ export default defineComponent({
 }
 .PodConsoleGrid {
   display: grid;
-  grid-template-columns: 120px 120px 120px 120px 120px 120px 120px;
+  grid-template-columns: 120px 320px 60px 70px 80px 70px 110px 110px;
 }
 .PodFontWeightBold {
   font-weight: bold;
+}
+.PodConsoleBottom {
+  border-bottom: 3px solid #c5c7c8;
 }
 </style>
