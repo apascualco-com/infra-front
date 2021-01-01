@@ -1,7 +1,7 @@
 <template>
   <div class="HomeInfoComponent">
     <div>
-      <h1 class="HomeInfoComponentTitle">Info</h1>
+      <h1 class="HomeInfoComponentTitle">Inf</h1>
     </div>
   </div>
 </template>

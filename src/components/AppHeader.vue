@@ -34,7 +34,7 @@ export default defineComponent({
 }
 .HeaderText {
   padding-top: 20px;
-  color: #C5C7C8;
+  color: #c5c7c8;
   font-size: 40px;
   font-weight: bold;
 }
@@ -42,12 +42,12 @@ export default defineComponent({
   font-size: 20px;
   padding: 10px;
   border-bottom: 2px solid black;
-  background-color: #C5C7C8;
+  background-color: #c5c7c8;
   a {
     font-weight: bold;
     color: #2c3e50;
     &.router-link-exact-active {
-      color: #2F855E;
+      color: #2f855e;
     }
   }
 }
