@@ -1,7 +1,7 @@
-import { apascualcoApiAxios } from "@/axios/HttpAxios";
+import { ApascualcoApiAxios } from "@/axios/ApascualcoApiAxios";
 
 export class NodeListService {
   static list() {
-    return apascualcoApiAxios.get("/node/lists");
+    return ApascualcoApiAxios.getInstance().get("/node/lists");
   }
 }

@@ -2,9 +2,9 @@
   <div class="KubernetesNode">
     <div>
       <h1 class="NodesTitle">Lista de nodos (Real time)</h1>
-      <div class="NodesConsoleHeader">user@host:/opt/kubernetes</div>
-      <div class="NodesConsolePrompt">user@host # kubectl get nodes</div>
-      <div class="NodesConsole NodesConsoleGrid NodeFontWeightBold">
+      <div class="PodConsoleHeader">user@host:/opt/kubernetes</div>
+      <div class="PodConsolePrompt">user@host # kubectl get nodes</div>
+      <div class="PodConsole PodConsoleGrid PodFontWeightBold">
         <div>NAME</div>
         <div>STATUS</div>
         <div>ROLES</div>
@@ -16,7 +16,7 @@
         <div>ARCHITECTURE</div>
       </div>
       <div
-        class="NodesConsole NodesConsoleGrid"
+        class="PodConsole PodConsoleGrid"
         v-for="item in clusterNodes"
         :key="item"
       >
@@ -50,7 +50,7 @@
           {{ item.architecture !== "" ? item.architecture : "-" }}
         </div>
       </div>
-      <div class="NodesConsolePrompt">user@host # |</div>
+      <div class="PodConsolePrompt">user@host # |</div>
       <div class="NodesConsoleBottom"></div>
     </div>
     <div>
@@ -132,8 +132,9 @@
 <script>
 import { NodeListService } from "./NodeListService";
 import { GitHubService } from "@/components/nodes/GitHubService";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "KubernetesNode",
   data() {
     return {
@@ -250,7 +251,7 @@ export default {
       this.githubTree.key = this.githubTree.key.substr(0, lastIndexOf);
     }
   }
-};
+});
 </script>
 
 <style scoped lang="scss">
@@ -282,7 +283,7 @@ a:hover {
   color: #c5c7c8;
   padding-bottom: 5px;
 }
-.NodesConsoleHeader {
+.PodConsoleHeader {
   border-radius: 30px 5px 0 0;
   font-size: 18px;
   font-weight: bold;
@@ -290,7 +291,7 @@ a:hover {
   padding: 3px;
   color: #2c3e50;
 }
-.NodesConsolePrompt {
+.PodConsolePrompt {
   font-size: 16px;
   font-weight: bold;
   background-color: #2c3e50;
@@ -302,10 +303,10 @@ a:hover {
   border-right: 3px solid #c5c7c8;
   text-align: left;
 }
-.NodeFontWeightBold {
+.PodFontWeightBold {
   font-weight: bold;
 }
-.NodesConsole {
+.PodConsole {
   font-size: 14px;
   padding-left: 10px;
   text-align: left;
@@ -315,7 +316,7 @@ a:hover {
   border-left: 3px solid #c5c7c8;
   border-right: 3px solid #c5c7c8;
 }
-.NodesConsoleGrid {
+.PodConsoleGrid {
   display: grid;
   grid-template-columns: 75px 75px 75px 75px 85px 145px 145px 175px 100px;
 }

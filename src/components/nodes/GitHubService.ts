@@ -1,4 +1,4 @@
-import { githubApiAxios } from "@/axios/HttpAxios";
+import { GitHubAxios } from "@/axios/GitHubAxios";
 
 export class GitHubService {
   static async repoInfoTree(user: string, reponame: string, branch: string) {
@@ -13,18 +13,18 @@ export class GitHubService {
       author: author,
       tree: null
     };
-    await githubApiAxios
+    await GitHubAxios.getInstance()
       .get(url)
       .then(response => (result["tree"] = response.data?.tree));
     return result;
   }
 
   private static branchInfo(user: string, reponame: string, branch: string) {
-    let response = null;
-    return githubApiAxios
+    return GitHubAxios.getInstance()
       .get("/" + user + "/" + reponame + "/branches/" + branch)
-      .then(r => (response = r.data));
-    return response;
+      .then(githubResponse => {
+        return githubResponse.data;
+      });
   }
 
   static repoFile(file: string) {
@@ -34,11 +34,11 @@ export class GitHubService {
       }
     };
     const url = file?.replace("https://api.github.com/repos/", "");
-    return githubApiAxios(url, header);
+    return GitHubAxios.getInstance().get(url, header);
   }
 
   static repoFolder(folder: string) {
     const url = folder?.replace("https://api.github.com/repos/", "");
-    return githubApiAxios(url);
+    return GitHubAxios.getInstance().get(url);
   }
 }
