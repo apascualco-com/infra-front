@@ -1,7 +1,6 @@
 <template>
   <div id="nav">
-    <NuxtLink to="/">Home</NuxtLink> |
-    <NuxtLink to="/nodes">Nodes</NuxtLink> |
+    <NuxtLink to="/">Home</NuxtLink> | <NuxtLink to="/nodes">Nodes</NuxtLink> |
     <NuxtLink to="/pods">Pods</NuxtLink> |
     <NuxtLink to="/metallb">Metallb</NuxtLink> |
     <NuxtLink to="/monitoring">Monitoring</NuxtLink> |
@@ -22,8 +21,8 @@
     font-weight: bold;
     color: #2c3e50;
     &.NuxtLink-exact-active {
-       color: #2F855E;
-     }
+      color: #2f855e;
+    }
   }
 }
 </style>
